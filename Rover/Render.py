@@ -30,8 +30,6 @@ class Render(object):
                 self.max_x = int(max_x)
             if max_y > self.max_y:
                 self.max_y = int(max_y)
-        self.max_x+=200
-        self.max_y+=200
         
     def Single_Zone(self, Zone, fig=None, offset=np.array([0,0])):
         w = self.margin
@@ -42,18 +40,19 @@ class Render(object):
         canvas_h = Zone_h + 2*wall_width
         w = w * self.scale
         if fig==None:
-            canvas = MultiCanvas(4, width=canvas_w, height=canvas_h)
-            """
-            Mars_img = Image.from_file('Images/Mars_surface.jpeg')
-            canvas3 = Canvas(width=1000, height=1000)
-            canvas3.draw_image(Mars_img, 0, 0)
-            canvas3.scale(0.1*self.scale/50)
-            canvas[0].draw_image(canvas3, 0, 0)
-            """
-            
+            canvas = MultiCanvas(4, width=canvas_w, height=canvas_h)   
         else:
             canvas = fig
         
+        # background
+        canvas[0].translate(offset[0], offset[1])
+        Mars_img = Image.from_file('Images/Mars_surface.jpg')
+        canvas3 = Canvas(width=1000, height=1000)
+        canvas3.draw_image(Mars_img, 0, 0)
+        canvas3.scale(3*self.scale/50)
+        canvas[0].draw_image(canvas3, 0, 0)
+        canvas[0].translate(-offset[0], -offset[1])
+
         # Draw Zone
         canvas[1].translate(offset[0], offset[1])
         canvas[1].fill_rect(0, 0, canvas_w, height=canvas_h)
@@ -61,7 +60,7 @@ class Render(object):
 
         # Name of thr Zone
         canvas[1].font = '16px serif'
-        canvas[1].stroke_text(Zone.name, Zone_w/2, 4*wall_width)
+        canvas[1].fill_text(Zone.name, Zone_w/2, 4*wall_width)
         canvas[1].translate(-offset[0], -offset[1])
 
         # Draw object insised the Zone 
@@ -112,7 +111,6 @@ class Render(object):
 
         loc_1 = Zone_1.connections['Location'][ind_1]
         loc_2 = Zone_2.connections['Location'][ind_2]
-        print('z = '+str(Zone_id_1)+' loc '+loc_1+' --- z = '+str(Zone_id_2)+' loc '+loc_2)
         coord_1 = self.problem_2_canvas(Zone_1.Location_2_coordinate[loc_1])
         coord_2 = self.problem_2_canvas(Zone_2.Location_2_coordinate[loc_2])
 
