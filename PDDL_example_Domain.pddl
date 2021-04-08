@@ -13,7 +13,7 @@
 )
 (:functions
 	(distance ?l1 ?l2 - location)
-	(Dt_zone_change ?z1 ?z?2 - Zone)
+	(Dt_zone_change ?z1 ?z2 - Zone)
 	(pickup-time)
 	(Drop-time)
 	(speed ?r - rover)
